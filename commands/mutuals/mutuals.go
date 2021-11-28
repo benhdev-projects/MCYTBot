@@ -50,7 +50,7 @@ func GetMutuals() func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 					content = fmt.Sprintf("Mutual servers for `%s#%s` (`%s`)", user.Username, user.Discriminator, user.ID)
 
 					for _, g := range s.State.Guilds {
-						if m, _ := s.GuildMember(g.ID, user.ID); m != nil {
+						if m, _ := s.State.Member(g.ID, user.ID); m != nil {
 							if len(servers)%5 == 0 {
 								s.FollowupMessageEdit(s.State.User.ID, i.Interaction, msgs[id], &discordgo.WebhookEdit{
 									Content: fmt.Sprintf("<a:vLoading:853377815630184501> Searching for mutual servers for `%s#%s (%s)` **%d so far**", user.Username, user.Discriminator, user.ID, len(servers)),
