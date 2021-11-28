@@ -13,7 +13,10 @@ import (
 func GetBans() func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	return func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		perms, _ := s.UserChannelPermissions(i.Member.User.ID, i.ChannelID)
-		if perms&discordgo.PermissionManageMessages == discordgo.PermissionManageMessages || i.ChannelID == "831587431756333056" {
+		if perms&discordgo.PermissionManageMessages != discordgo.PermissionManageMessages && i.ChannelID != "831587431756333056" {
+			errors.ReturnAccessDenied(s, i)
+			return
+		}
 			ids := strings.Split(i.ApplicationCommandData().Options[0].StringValue(), ",")
 			content := fmt.Sprintf("Checking if `%s` is banned anywhere", strings.Join(ids, "`, `"))
 			content = strings.TrimSuffix(content, ", ``")
@@ -27,6 +30,7 @@ func GetBans() func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
 			if err != nil {
 				errors.ReturnError(*sentry.CaptureException(err), s, i)
+				return
 			}
 			msgs := make(map[string]string)
 
@@ -34,6 +38,7 @@ func GetBans() func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 				user, err := s.User(id)
 				if err != nil {
 					errors.ReturnError(*sentry.CaptureException(err), s, i)
+					return
 				}
 				if user != nil {
 					content = fmt.Sprintf("<a:vLoading:853377815630184501> Checking whether `%s#%s (%s)` is banned anywhere", user.Username, user.Discriminator, user.ID)
@@ -88,8 +93,6 @@ func GetBans() func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 					Content: content,
 				})
 			}
-		} else {
-			errors.ReturnAccessDenied(s, i)
 		}
 	}
 }
