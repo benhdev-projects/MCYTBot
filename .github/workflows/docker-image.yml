@@ -22,8 +22,8 @@ jobs:
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: benhall1998/mcytbot
           TAG_NAME: "latest"
-          BUILDX: "true"
       
       - name: Send Restart Request
         # You may pin to the exact commit or the version.
