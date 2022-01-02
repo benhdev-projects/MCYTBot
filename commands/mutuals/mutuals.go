@@ -13,7 +13,7 @@ import (
 func GetMutuals() func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	return func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		perms, _ := s.UserChannelPermissions(i.Member.User.ID, i.ChannelID)
-		if perms&discordgo.PermissionManageMessages == discordgo.PermissionManageMessages || i.ChannelID == "831587431756333056" {
+		if perms&discordgo.PermissionManageMessages == discordgo.PermissionManageMessages || i.ChannelID == "926994654241644554" {
 			ids := strings.Split(i.ApplicationCommandData().Options[0].StringValue(), ",")
 			content := strings.TrimSuffix(fmt.Sprintf("Searching for mutual servers for `%s`", strings.Join(ids, "`, `")), ", ``")
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
